@@ -1,0 +1,35 @@
+<configuration>
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} | [%thread] | %-5level | %logger{36} | trace_id=%X{trace_id} | span_id=%X{span_id} | trace_flags=%X{trace_flags} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>./log/observabilidade.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>./log/observabilidade.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} | [%thread] | %-5level | %logger{36} | trace_id=%X{trace_id} | span_id=%X{span_id} | trace_flags=%X{trace_flags} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="OpenTelemetry"
+              class="io.opentelemetry.instrumentation.logback.appender.v1_0.OpenTelemetryAppender">
+    </appender>
+
+<!--    <appender name="OTEL" class="io.opentelemetry.instrumentation.logback.mdc.v1_0.OpenTelemetryAppender">-->
+<!--        <appender-ref ref="console" />-->
+<!--        <appender-ref ref="rollingFile"/>-->
+<!--    </appender>-->
+
+
+    <root level="INFO">
+<!--        <appender-ref ref="OTEL" />-->
+        <appender-ref ref="rollingFile"/>
+        <appender-ref ref="console" />
+        <appender-ref ref="OpenTelemetry"/>
+    </root>
+</configuration>
